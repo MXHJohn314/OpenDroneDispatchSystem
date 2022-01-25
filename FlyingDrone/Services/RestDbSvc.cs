@@ -30,7 +30,7 @@ namespace Facilicase2.Services
             http.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue(
                 "Basic",
                 Convert.ToBase64String(
-                    System.Text.Encoding.ASCII.GetBytes("admins:Snarfblat")));
+                    System.Text.Encoding.ASCII.GetBytes("username:password")));
 
 
             http.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -70,7 +70,7 @@ namespace Facilicase2.Services
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue(
                     "Basic",
                     Convert.ToBase64String(
-                        System.Text.Encoding.ASCII.GetBytes("admins:Snarfblat")));
+                        System.Text.Encoding.ASCII.GetBytes("username:password")));
 
 
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -137,7 +137,7 @@ namespace Facilicase2.Services
             request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue(
                 "Basic",
                 Convert.ToBase64String(
-                    System.Text.Encoding.ASCII.GetBytes("admins:Snarfblat")));
+                    System.Text.Encoding.ASCII.GetBytes("username:password")));
 
             return await http.SendAsync(request);
         }
