@@ -1,0 +1,26 @@
+### visual Studio files
+
+*.suo
+*.user
+*.sln.docstates
+
+#build files
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+build/
+bld/
+[Bb]in/
+[Oo]bj/
+.vs/
+
+*.pdb
+*.obj
+
+# Rolsyn cache
+*.ide/
+
+
