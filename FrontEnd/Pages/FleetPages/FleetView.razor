@@ -1,0 +1,53 @@
+﻿@page "/"
+@using FrontEnd.Services
+
+@* @inject Services.HttpMethods restPoint *@
+@inject FrontEndToDatabaseGateway FrontEndToDatabaseGateway;
+@inject GlobalDataSvc globalData
+@inject HttpClient _client
+@inject DialogService dialogService
+
+<!--Quick info about various fleet metrics at top of page-->
+<div class="quick-look">
+    <div class="status-bar">
+        <b>Fleet Size: @size</b>
+    </div>
+    @if (connection)
+    {
+        <div class="connection-bar" data-hover="Database: Connected">
+            <span class="oi oi-circle-check" style="color: #08af08"></span>
+        </div>
+    }
+    else
+    {
+        <div class="connection-bar" data-hover="Database: No Connection">
+            <span class="oi oi-circle-x" style="color: #FC401E"></span>
+        </div>
+    }
+
+</div>
+
+<!--Block that displays all the current drones in the fleet-->
+<div class="main">
+    <ul class="drone-fleet">
+        @if (Fleet != null)
+        {
+            @foreach (var drone in Fleet)
+            {
+                <!--Creates a block for each drone with id, status, more info button and a drone img-->
+                <li style="background-image: url(@("../images/drone.jpg"))">
+                    <div class="drone-status">
+                        <span class="title">
+                            Drone
+                            <br>#@(drone.BadgeNumber)<br>
+                        </span>
+                        <span class="price" style="background-color: @Color(drone)">@drone.State</span>
+                        <span class="more">
+                            <RadzenButton style="background-color: #3b3b3b" Icon="add_circle_outline" Click=@(args => GoToDrone(drone)) />
+                        </span>
+                    </div>
+                </li>
+            }
+        }
+    </ul>
+</div>

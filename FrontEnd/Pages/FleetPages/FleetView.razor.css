@@ -1,0 +1,155 @@
+﻿
+.connection-bar {
+    position: relative;
+    z-index: 1;
+    width: 70px;
+    border-radius: 0.5rem;
+    background-color: #1e1e24;
+    /*Spaces connection div from status bar*/
+    margin-left: 5px !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+.connection-bar:before {
+    content: attr(data-hover);
+    visibility: hidden;
+    opacity: 0;
+    width: 70px;
+    background-color: #696969;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px 0;
+    transition: opacity 1s ease-in-out;
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    top: 110%;
+    color: white;
+    text-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.connection-bar:hover:before {
+    opacity: 1;
+    visibility: visible;
+}
+
+.connection-bar:hover {
+    transform: scale(1.02);
+}
+
+.quick-look {
+    border-radius: 0.5rem;
+    display: flex;
+    padding: 0px !important;
+}
+
+.status-bar {
+    border-radius: 0.5rem;
+    flex-grow: 1;
+    background-color: #3f7cac;
+    padding: 1.5rem !important;
+    color: #fcfffd;
+    text-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+/* DONT DELETE WILL COME IN HANDY LATER 
+    .status-bar .connection {
+        float: right;
+        margin-top: -0.8rem;
+        margin-right: -0.8rem;
+        font-size: 1.5rem;
+        font-weight: 700;
+        padding: 0rem 0.7rem;
+        border-radius: 4px;
+        background-color: #08af08;
+        color: white;
+        line-height: 2rem;
+    }*/
+
+.main {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 1.5rem !important;
+}
+
+
+.drone-fleet {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 20rem);
+    grid-gap: 2rem;
+    justify-content: center;
+    padding-left: 0;
+}
+
+.drone-fleet > li {
+    height: 10rem;
+    position: relative;
+    z-index: 0;
+    background-size: cover;
+    border-radius: 0.5rem;
+    list-style-type: none;
+    box-shadow: 0 3px 4px rgba(0, 0, 0, 0.4);
+    transition: 0.1s ease-out;
+}
+
+.drone-fleet > li:hover {
+    transform: scale(1.02);
+}
+
+
+.drone-status {
+    border-radius: 0.5rem;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    position: absolute;
+    padding: 1rem 1rem;
+    color: #fff2cc;
+    cursor: pointer;
+    text-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
+    line-height: 1.25rem;
+}
+
+.drone-status .title {
+    color: #3b3b3b;
+    font-size: 1.5rem;
+    font-weight: 700;
+    display: block;
+    margin: 0.2rem 0 0.4rem 0;
+    font-family: 'Bahnschrift', Arial, Helvetica, sans-serif;
+    text-transform: uppercase;
+}
+
+.drone-status .price {
+    position: absolute;
+    bottom: 0.5rem;
+    right: 1rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    padding: 0rem 0.7rem;
+    border-radius: 4px;
+    background-color: #08af08;
+    color: white;
+    line-height: 2rem;
+}
+
+.drone-status .more {
+    position: absolute;
+    bottom: 0.5rem;
+    left: 0.3rem;
+    padding: 0rem 0.7rem;
+    line-height: 2rem;
+}
+
+    

@@ -1,0 +1,40 @@
+﻿<div class="top-row pl-4 navbar navbar-dark">
+    <a class="navbar-brand" href="">FrontEnd</a>
+    <button class="navbar-toggler" @onclick="ToggleNavMenu">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+</div>
+
+
+<!-- Heres a link for available icons https://icon-sets.iconify.design/oi/cart/ -->
+<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+    <ul class="nav flex-column">
+        <li class="nav-item px-3">
+            <NavLink id="page1" class="nav-link" href="" Match="NavLinkMatch.All">
+                <span class="oi oi-grid-three-up" aria-hidden="true"></span> Fleet View
+            </NavLink>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink id="page2" class="nav-link" href="order" Match="NavLinkMatch.All">
+                <span class="oi oi-cart" aria-hidden="true"></span> Order
+            </NavLink>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink id="page3" class="nav-link" href="tracking">
+                <span class="oi oi-map-marker" aria-hidden="true"></span> Tracking
+            </NavLink>
+        </li>
+    </ul>
+</div>
+
+@code {
+    private bool collapseNavMenu = true;
+
+    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+
+}

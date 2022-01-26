@@ -1,0 +1,188 @@
+﻿.content {
+    display: flex;
+    margin-top: 0.5rem;
+    padding: 0px;
+}
+
+.btn {
+    background-color: #3f7cac;
+    border-radius: 0.5rem;
+    color: white;
+    text-shadow: 0 2px 2px rgba(0,0,0,0.5);
+    font-size: 18px;
+    font-weight: 700;
+}
+
+    .btn:active {
+        transform: scale(0.97);
+    }
+
+.exit{
+    margin-left: 88%;
+    line-height: 1;
+}
+
+
+.grid-container {
+    float: left;
+    width: 50%;
+    height: 750px;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 70px auto;
+    border-radius: 0.5rem;
+    background-color: #1e1e24;
+}
+
+.container-title {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    height: 60px;
+    border-radius: 0.5rem;
+    background-color: #35353a;
+    padding-left: 0.5rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    margin: 0.5rem 0.5rem 1rem 0.5rem;
+    color: white;
+    text-shadow: 0 2px 2px rgba(0,0,0,0.5);
+    font-size: 24px;
+    font-weight: 700;
+}
+
+
+.input {
+    grid-column-start: 1;
+    grid-column-end: 1;
+    border-radius: 0.5rem;
+    background-color: #35353a;
+    box-shadow: 0 3px 4px rgba(0,0,0,0.4);
+    margin: 1rem 0.25rem 1rem 0.5rem;
+    padding: 0.5rem !important;
+    line-height: 3;
+    text-align: right;
+    color: white;
+}
+
+.info-cards {
+    grid-column-start: 2;
+    grid-column-end: 2;
+    grid-row-start: 2;
+    grid-row-end: 4;
+    height: 650px;
+    border-radius: 0.5rem;
+    background-color: #1e1e24;
+    margin: 1rem 0.5rem 0.5rem 0.25rem;
+    color: white;
+    text-shadow: 0 2px 2px rgba(0,0,0,0.5);
+    font-size: 24px;
+    font-weight: 700;
+}
+
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+.drone-fleet {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 20rem);
+    grid-template-rows: repeat(auto-fill, 10rem);
+    grid-gap: 1rem;
+    padding-left: 0.5rem;
+    padding-right: 0rem;
+    height: 100%;
+    z-index: 1;
+    overflow-y: scroll;
+    margin: 0rem 0rem 0.5rem 0rem;
+}
+
+    .drone-fleet::-webkit-scrollbar {
+        width: 10px;
+        background-color: #35353a !important;
+        border-radius: 0.5rem;
+    }
+
+    .drone-fleet::-webkit-scrollbar-corner {
+        background-color: #F00000 !important;
+    }
+    /* Handle */
+    .drone-fleet::-webkit-scrollbar-thumb {
+        background: #3f7cac !important;
+    }
+
+    .drone-fleet > li {
+        width: 322px;
+        height: 10rem !important;
+        position: relative;
+        z-index: 0;
+        background-size: cover;
+        border-radius: 0.5rem;
+        list-style-type: none;
+        box-shadow: 0 3px 4px rgba(0,0,0,0.4);
+        transition: 0.1s ease-out;
+    }
+
+        .drone-fleet > li:hover {
+            transform: scale(1.01);
+        }
+        .drone-fleet > li:active {
+            transform: scale(0.95);
+        }
+
+
+.drone-status {
+    border-radius: 0.5rem;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    position: absolute;
+    padding: 1rem 1rem;
+    color: #fff2cc;
+    cursor: pointer;
+    text-shadow: 0 2px 2px rgba(0,0,0,0.5);
+    line-height: 1.25rem;
+}
+
+    .drone-status .title {
+        color: #3b3b3b;
+        font-size: 1.5rem;
+        font-weight: 700;
+        display: block;
+        margin: 0.2rem 0 0.4rem 0;
+        font-family: 'Bahnschrift', Arial, Helvetica, sans-serif;
+        text-transform: uppercase;
+    }
+
+    .drone-status .price {
+        position: absolute;
+        bottom: 0.5rem;
+        right: 1rem;
+        font-size: 1.5rem;
+        font-weight: 700;
+        padding: 0rem 0.7rem;
+        border-radius: 4px;
+        background-color: #08af08;
+        color: white;
+        line-height: 2rem;
+    }
+
+    .drone-status .more {
+        position: absolute;
+        bottom: 0.5rem;
+        left: 0.3rem;
+        padding: 0rem 0.7rem;
+        line-height: 2rem;
+    }
+
+    .drone-status .address {
+        color: #3f7cac;
+        font-size: 21px;
+        text-shadow: 0 1px 1px rgba(0,0,0,0.25);
+        position: absolute;
+        bottom: 0.25rem;
+        left: 0.3rem;
+        padding: 0rem 0.3rem;
+        line-height: 1.3rem;
+    }
+
+    

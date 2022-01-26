@@ -1,0 +1,354 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+    <title>FlyingPizza</title>
+    <base href="/"/>
+    <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet"/>
+    <link href="css/app.css" rel="stylesheet"/>
+    <link href="FrontEnd.styles.css" rel="stylesheet"/>
+
+    <link href="_content/Radzen.Blazor/css/default-base.css" rel="stylesheet">
+</head>
+
+<body>
+<script async
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABM05Ov28GgnvCE6fvNUT0hmPB7Ol6kuI&libraries=geometry&callback=initGoogleMap">
+</script>
+<script src="_content/Radzen.Blazor/Radzen.Blazor.js"></script>
+<div id="app">Loading...</div>
+
+<div id="blazor-error-ui">
+    An unhandled error has occurred.
+    <a class="reload" href="">Reload</a>
+    <a class="dismiss">🗙</a>
+</div>
+<script src="_framework/blazor.webassembly.js"></script>
+
+<script>
+    var map
+    let currentLocations = {}
+    let destinations = {}
+    let paths = {}
+    const lineSymbol = {
+        path: "M 0,-1 0,1",
+        strokeOpacity: 1,
+        scale: 4,
+    };
+    const circleRadius = 150
+
+    function initGoogleMap(obj) {
+        map = new google.maps.Map(document.getElementById("map"), {
+            center: {lat: obj.lat, lng: obj.lng},
+            zoom: 12,
+            styles: [
+                {elementType: "geometry", stylers: [{color: "#1E1E24"}]},
+                {elementType: "labels.text.stroke", stylers: [{color: "#242f3e"}]},
+                {elementType: "labels.text.fill", stylers: [{color: "#746855"}]},
+                {
+                    featureType: "administrative.locality",
+                    elementType: "labels.text.fill",
+                    stylers: [{color: "#3f7cac"}],
+                },
+                {
+                    featureType: "poi",
+                    elementType: "labels.text.fill",
+                    stylers: [{color: "#3f7cac"}],
+                },
+                {
+                    featureType: "poi.park",
+                    elementType: "geometry",
+                    stylers: [{color: "#242f3e"}],
+                },
+                {
+                    featureType: "poi.park",
+                    elementType: "labels.text.fill",
+                    stylers: [{color: "#3f7cac"}],
+                },
+                {
+                    featureType: "road",
+                    elementType: "geometry",
+                    stylers: [{color: "#38414e"}],
+                },
+                {
+                    featureType: "road",
+                    elementType: "geometry.stroke",
+                    stylers: [{color: "#212a37"}],
+                },
+                {
+                    featureType: "road",
+                    elementType: "labels.text.fill",
+                    stylers: [{color: "#9ca5b3"}],
+                },
+                {
+                    featureType: "road.highway",
+                    elementType: "geometry",
+                    stylers: [{color: "#bfbfbf"}],
+                },
+                {
+                    featureType: "road.highway",
+                    elementType: "geometry.stroke",
+                    stylers: [{color: "#1f2835"}],
+                },
+                {
+                    featureType: "road.highway",
+                    elementType: "labels.text.fill",
+                    stylers: [{color: "#f3d19c"}],
+                },
+                {
+                    featureType: "transit",
+                    elementType: "geometry",
+                    stylers: [{color: "#2f3948"}],
+                },
+                {
+                    featureType: "transit.station",
+                    elementType: "labels.text.fill",
+                    stylers: [{color: "#d59563"}],
+                },
+                {
+                    featureType: "water",
+                    elementType: "geometry",
+                    stylers: [{color: "#17263c"}],
+                },
+                {
+                    featureType: "water",
+                    elementType: "labels.text.fill",
+                    stylers: [{color: "#515c6d"}],
+                },
+                {
+                    featureType: "water",
+                    elementType: "labels.text.stroke",
+                    stylers: [{color: "#17263c"}],
+                },
+            ],
+        });
+        deliveryZone = new google.maps.Circle({
+            center: {lat: 39.74386695629378, lng: -105.00610500179027},
+            radius: 10000,
+            map: map,
+            fillOpacity: .3
+        });
+    }
+
+    function addPath(id, lat1, lng1, lat2, lng2, color) {
+        let flightPlanCoordinates = [
+            {lat: lat1, lng: lng1},
+            {lat: lat2, lng: lng2}
+        ];
+        let path = new google.maps.Polyline({
+            path: flightPlanCoordinates,
+            geodesic: true,
+            fillColor: color,
+            strokeColor: color,
+            strokeOpacity: 1.0,
+            strokeWeight: 0.5,
+            icons: [
+                {
+                    icon: lineSymbol,
+                    offset: "0",
+                    repeat: "1px",
+                },
+            ],
+
+        });
+        paths[id] = path
+        path.setMap(map);
+    }
+
+    function addTriangle(droneId, color, lat, lng, bearing, title, markerDict, destLat, destLng) {
+        // https://stackoverflow.com/questions/43067318/adding-a-circle-radius-around-google-map-markers
+        // https://developers.google.com/maps/documentation/javascript/reference/geometry#spherical.computeHeading
+        console.log("addTriangle(" + droneId + ", " + color +", " + lat +  + lng + ", " + bearing + ", " + title + ")")
+        let marker = new google.maps.Marker({
+            position: {lat: lat, lng: lng},
+            title: title,
+            icon: "-"
+        });
+        var heading = google.maps.geometry.spherical.computeHeading(marker.getPosition(), {lat: destLat, lng: destLng})
+        var triangle1 = google.maps.geometry.spherical.computeOffset(marker.getPosition(), 250, heading);
+        var triangle2 = google.maps.geometry.spherical.computeOffset(marker.getPosition(), 250, (heading + 120) % 360);
+        var triangle3 = google.maps.geometry.spherical.computeOffset(marker.getPosition(), 250, (heading + 240) % 360);
+        var triangleCoords = [triangle1, triangle2, triangle3];
+        marker.Triangle = new google.maps.Polygon({
+            path: triangleCoords,
+            strokeColor: color,
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: color,
+            fillOpacity: 0.35
+        });
+        marker.Triangle.setMap(map);
+        marker.Triangle.bindTo('center', marker, 'position');
+        markerDict[droneId] = marker;
+        marker.setMap(map);
+    }
+
+    function addCircle(droneId, color, lat, lng, title, markerDict) {
+        // https://stackoverflow.com/questions/43067318/adding-a-circle-radius-around-google-map-markers
+        console.log("addCircle(" + droneId + ", " + color +", " + lat +  + lng + ", " + title + ")")
+        let marker = new google.maps.Marker({
+            position: {lat: lat, lng: lng},
+            title: title,
+            icon: "-"
+        });
+        marker.Circle = new google.maps.Circle({
+            center: {lat: marker.getPosition().lat - 16, lng: marker.getPosition().lng - 16},
+            radius: circleRadius,
+            map: map,
+            strokeColor: color,
+            fillColor: color,
+            fillOpacity: .75
+        });
+        marker.Circle.bindTo('center', marker, 'position');
+        markerDict[droneId] = marker;
+        marker.setMap(map);
+    }
+
+    function removePath(droneId) {
+        paths[droneId].setMap(null)
+        delete paths[droneId]
+    }
+
+    function removeCircle(droneId, dictionary) {
+        dictionary[droneId].Circle.setMap(null)
+        dictionary[droneId].setMap(null)
+        dictionary[droneId] = null
+        delete dictionary[droneId]
+    }
+
+    function removeTriangle(droneId, dictionary) {
+        dictionary[droneId].Triangle.setMap(null)
+        dictionary[droneId].setMap(null)
+        dictionary[droneId] = null
+        delete dictionary[droneId]
+    }
+
+    function updateAll(newCurrentLocations, newDestinations, newPaths) {
+        for (let [droneId, oldCurrent] of Object.entries(currentLocations)) {
+            if(!(droneId in newCurrentLocations)){
+                removeTriangle(droneId, currentLocations)
+            }
+        }
+        for (let [droneId, oldDestination] of Object.entries(destinations)) {
+            if(!(droneId in newDestinations)){
+                // removeCircle(droneId, destinations)
+            }
+        }
+        for (let [droneId, oldPath] of Object.entries(paths)) {
+            if(!(droneId in newPaths)){
+                removePath(droneId, paths)
+            }
+        }
+
+        for (let [droneId, newCurrent] of Object.entries(newCurrentLocations)) {
+            if(!(droneId in currentLocations)){
+                console.log(droneId + " not found in currentLocations" +
+                    "addTriangle(" + droneId + "," + newCurrent["color"]+"," +newCurrent["lat"]+","+ newCurrent["lng"]+","
+                    +newCurrent["bearing"]+"," +newCurrent["title"]+","+ currentLocations, newCurrent["destLat"], newCurrent["destLng"])
+                addTriangle(droneId, newCurrent["color"], newCurrent["lat"], newCurrent["lng"], newCurrent["bearing"], newCurrent["title"], currentLocations, newCurrent["destLat"], newCurrent["destLng"])
+            } else {
+                console.log("found", droneId + "in currentLocations")
+
+
+                if(newCurrent["lat"] !== currentLocations[droneId].position.lat ||
+                    newCurrent["lng"] !== currentLocations[droneId].position.lng){
+                    console.log("it moved. updateCurrent(",droneId, newCurrent["lat"], newCurrent["lng"],")")
+                    updateCurrent(droneId, newCurrent);
+                }
+            }
+        }
+        for (let [droneId, newDestination] of Object.entries(newDestinations)) {
+            if(!(droneId in destinations)){
+                // addCircle(droneId, newDestination["color"], newDestination["lat"], newDestination["lng"], newDestination["title"], destinations);
+            } else {
+
+                if(
+                    newDestination["lat"] !== destinations[droneId].position.lat
+                    || newDestination["lng"] !== destinations[droneId].position.lng){
+                    // updateDestination(droneId, newDestination["lat"], newDestination["lng"]);
+                }
+            }
+        }
+        for (let [droneId, newPath] of Object.entries(newPaths)) {
+            if(!(droneId in paths)){
+                addPath(droneId, newPath["lat1"], newPath["lng1"], newPath["lat2"], newPath["lng2"], newPath["color"])
+            } else {
+                // let oldPath = paths[droneId];
+                // for (var prop in oldPath.getPath().getAt(0)) {
+                //     console.log(prop);
+                // }
+                // if(newPath["lat1"] !== oldPath.getPath().getAt(0).lat ||
+                //     newPath["lat2"] !== oldPath.getPath().getAt(1).lat ||
+                //     newPath["lng1"] !== oldPath.getPath().getAt(0).lng ||
+                //     newPath["lng2"] !== oldPath.getPath().getAt(1).lng){
+                    updatePath(droneId, newPath);
+                // }
+            }
+        }
+
+
+        //
+        // for (let [droneId, newMarker] of Object.entries(newCurrentLocations)) {
+        //     if(!(droneId in currentLocations)){
+        //         addTriangle(droneId, newMarker["color"], newMarker["lat"], newMarker["lng"], newMarker["bearing"], newMarker["title"], currentLocations, newMarker["destLat"], newMarker["destLng"])
+        //     }
+        // }
+        // for (let [droneId, newDestination] of Object.entries(newDestinations)) {
+        //     if(!(droneId in paths)){
+        //         addCircle(droneId, newDestination["color"], newDestination["lat"], newDestination["lng"], newDestination["title"], destinations);
+        //     }
+        // }
+        // for (let [droneId, newPath] of Object.entries(newPaths)) {
+        //     addPath(droneId, newPath["lat1"], newPath["lng1"], newPath["lat2"], newPath["lng2"], newPath["color"])
+        // }
+    }
+    function updateDestination(id, lat, lng) {
+        destinations[id].setMap(map)
+        destinations[id].setPosition(new google.maps.LatLng(lat, lng))
+    }
+    function updateCurrent(id, newCurrent) {
+        removeTriangle(id, currentLocations);
+        addTriangle(id, newCurrent["color"], newCurrent["lat"], newCurrent["lng"], newCurrent["bearing"], newCurrent["title"], currentLocations, newCurrent["destLat"], newCurrent["destLng"])
+    }
+
+    function updatePath(id, newPath) {
+        paths[id].setMap(map)
+        paths[id].setPath( [
+            {lat: newPath["lat1"], lng: newPath["lng1"]},
+            {lat: newPath["lat2"], lng: newPath["lng2"]}
+        ]);
+        paths[id].setOptions({fillColor: newPath["color"], strokeColor: newPath["color"]});
+    }
+
+    function removeCurrentMarkers(){
+        for (let droneId in currentLocations) {
+            console.log("removing '" + droneId + "' from currentMarkers");
+            removeTriangle(droneId, currentLocations);
+        }
+    }
+
+    function removeDestinations(){
+        for(let droneId in destinations){
+            console.log("removing '" + droneId + "' from destinations");
+            removeCircle(droneId, destinations);
+        }
+    }
+
+    function removePaths(){
+        for(let droneId in paths){
+            console.log("removing '" + droneId + "' from paths");
+            removePath(droneId);
+        }
+    }
+
+    function removeAllMarkers() {
+        removeCurrentMarkers();
+        removeDestinations();
+        removePaths();
+    }
+</script>
+</body>
+
+</html>

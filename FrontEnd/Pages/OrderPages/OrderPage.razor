@@ -1,0 +1,131 @@
+﻿@page "/order"
+@using FrontEnd.Services
+@inject NavigationManager NavigationManager
+@inject FrontEndToDatabaseGateway DatabaseGateway
+
+<div class="quick-look">
+    <div class="status-bar" >
+        <b>Management Page</b>
+    </div>
+    @if (connection)
+    {
+        <div class="connection-bar" data-hover="Database: Connected">
+            <span class="oi oi-circle-check" style="color: #08af08"></span>
+        </div>
+    }
+    else
+    {
+        <div class="connection-bar" data-hover="Database: No Connection">
+            <span class="oi oi-circle-x" style="color: #FC401E"></span>
+        </div>
+    }
+
+</div>
+
+<div class="content">
+    <div class="grid-container" style="margin-right: 0.25rem;"> 
+        <div class="container-title"> Order Manager</div>
+            <div>
+                <div class="input" style="height: 160px">
+                    <b>Customer Name: </b>
+                    <RadzenTextBox id="CUST_NAME" Style="width: 190px" Placeholder="..." AutoComplete="false" @oninput=@(e => CustomerName = e.Value.ToString()) />
+                    <br />
+                    <b>Address: </b> 
+                    <RadzenTextBox id="ADDRESS" Style="width: 190px" Placeholder="..." AutoComplete="false" @oninput=@(e => DeliveryAddress = e.Value.ToString()) />
+                    <br />     
+                    <button id="ORDER_CREATE_BTN" class="btn" style="width: 190px" @onclick=@MakeOrder> Create Order </button>
+                </div>
+
+                <div class="input" style="height: 130px">
+                    <b>Order Id: </b>
+                    @if (selectedOrder != null)
+                    {
+                    <RadzenTextBox id="CANCEL_ORDER" value="@defaultText" Style="width: 190px" Placeholder="..." AutoComplete="false" @oninput=@(e => orderToCancel = e.Value.ToString()) />
+
+                } else
+                {
+                    <RadzenTextBox id="CANCEL_ORDER" value="@defaultText" Style="width: 190px" Placeholder="..." AutoComplete="false" @oninput=@(e => orderToCancel = e.Value.ToString()) />
+                }
+                <br />
+                    <button id="CANCEL_ORDER_BTN" class="btn" style="width: 190px" @onclick=@CancelOrder> Cancel Order </button>
+                </div>
+
+                <div class ="input" style="visibility: @visibility; text-align: left; font-size: 20px; line-height: 2;">
+                    <div class="exit">
+                        <button id="EXIT_BTN" class="btn" style="padding: 0px 4px 0px 4px; float:right;" @onclick=@OnInfoClose>X</button>
+
+                    </div>
+
+                    @if (selectedOrder != null)
+                    {
+                        <div>ID: @selectedOrder.Id</div>
+                        <div>Delivery Location: @selectedOrder.DeliveryAddress</div>
+                        <div>Customer Name: @selectedOrder.CustomerName</div>
+                        <div>Order Time: @selectedOrder.TimeOrdered</div>
+                    }
+
+
+                </div>
+            </div>
+                 
+            <div class="info-cards">
+                  <ul id="DRONE_FLEET_CARD" class="drone-fleet">
+                    @if (Orders != null)
+                    {
+                        @foreach (var order in Orders)
+                        {
+                            <!--Creates a block for each drone with id, status, more info button and a drone img-->
+                            <li style="background-image: url(@("../images/order.jpg")" @onclick="@(args => DisplaySelected(@order))">
+                                <div class="drone-status">
+                                    <span class="title" >Order ID: @order.Id.Substring(0,8)...</span>
+                                    <span class="address">@order.DeliveryAddress</span>                                  
+                                </div>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+    </div> @*end of order manager div*@
+
+    <div class="grid-container" style="margin-left: 0.25rem;"> 
+        <div class="container-title">Drone Manager</div>
+        <div>
+            <div class="input" style="height: 120px">
+                <b>Drone Url: </b>
+                <RadzenTextBox id="DRONE_URL" Style="width: 190px" Placeholder="..." AutoComplete="false" @oninput=@(e => DroneUrl = e.Value.ToString()) />
+                <br />   
+                <button id="ADD_DRONE_BTN" class="btn" style="width: 190px" @onclick=@AddDrone> Add Drone </button>
+            </div>
+
+            <div class="input" style="height: 120px">
+                <b>Drone Id: </b>
+                <RadzenTextBox id="DRONE_URL2" Style="width: 190px" Placeholder="..." AutoComplete="false" @oninput=@(e => CustomerName = e.Value.ToString()) />  
+                <br />
+                <button id="REMOVE_DRONE_URL" class="btn" style="width: 190px"> Remove Drone </button>
+            </div>
+        </div>
+        
+        <div class="info-cards">
+          <ul class="drone-fleet">
+                    @if (Fleet != null)
+                    {
+                        @foreach (var drone in Fleet)
+                        {
+                            <!--Creates a block for each drone with id, status, more info button and a drone img-->
+                            <li style="background-image: url(@("../images/drone.jpg")">
+                                <div class="drone-status">
+                                    <span class="title" >Drone
+                                        <br>#@(drone.BadgeNumber)<br>
+                                    </span>
+                                    <span class="price" style="background-color: @Color(drone)">@drone.State</span>
+                                    @*<span class="more">
+                                        <RadzenButton style="background-color: #3b3b3b" Icon="add_circle_outline" Click=@(args => GoToDrone(drone)) />
+                                    </span>*@
+                                </div>
+                            </li>
+                        }
+                    }
+                </ul>      
+        </div>
+    </div> @*end of drone manager div*@
+</div>

@@ -1,0 +1,91 @@
+﻿@page "/tracking"
+@using FrontEnd.Services
+@*https://www.radzen.com/documentation/blazor/googlemap/*@
+@*https://blazor.radzen.com/googlemap*@
+
+<div class="quick-look">
+    <div class="status-bar">
+        <b>Tracking Page</b>
+    </div>
+    @if (connection)
+    {
+        <div class="connection-bar" data-hover="Database: Connected">
+            <span class="oi oi-circle-check" style="color: #08af08"></span>
+        </div>
+    }
+    else
+    {
+        <div class="connection-bar" data-hover="Database: No Connection">
+            <span class="oi oi-circle-x" style="color: #FC401E"></span>
+        </div>
+    }
+
+</div>
+
+<div class="content">
+    <div class="drone-bar">
+        <div class="selection-bar">
+            <div class="dropdown">
+                @dropDownLabel
+                <span class="oi oi-menu" style="color: white; font-size:20px"></span>
+
+                <div class="dropdown-content">
+                    <btn @onclick="@(args => DisplayDroneAsync("Delivering"))">Delivering</btn>
+                    <btn @onclick="@(args => DisplayDroneAsync("Returning"))">Returning</btn>
+                    <btn @onclick="@(args => DisplayDroneAsync("Dead"))">Dead</btn>
+                    <btn @onclick="@(args => DisplayDroneAsync("Ready"))">Ready</btn>
+                    <btn @onclick="@(args => DisplayDroneAsync("Charging"))">Charging</btn>
+                </div>
+
+            </div>
+        </div>
+
+        <ul class="drone-fleet">
+            @if (filteredDrones != null)
+            {
+                @foreach (var drone in filteredDrones)
+                {
+                    <!--Creates a block for each drone with id, status, more info button and a drone img-->
+                    <li style="background-image: url('../images/drone.jpg')">
+                        <div class="drone-status">
+                            <span class="title">
+                               Drone
+                                <br>#@(drone.BadgeNumber)<br>
+                            </span>
+                            <span class="price" style="background-color: @Color(drone)">@drone.State</span>
+                            @* <span class="more">
+                            <RadzenButton style="background-color: #3b3b3b" Icon="add_circle_outline" Click=@(args => GoToDrone(drone)) />
+                        </span>*@
+                        </div>
+                    </li>
+                }
+            }
+        </ul>
+
+    </div>
+    <div class="map" id="map"></div>
+
+</div>
+
+
+@code {
+    int test = 0;
+    readonly int zoom = 15;
+    bool showMSU;
+    EventConsole console;
+
+    void OnMapClick(GoogleMapClickEventArgs args)
+    {
+        console.Log($"Map clicked at Lat: {args.Position.Lat}, Lng: {args.Position.Lng}, Zoom:{zoom}");
+    }
+
+    void OnMarkerClick(RadzenGoogleMapMarker marker)
+    {
+        console.Log($"Map {marker.Title} marker clicked. Marker position -> Lat: {marker.Position.Lat}, Lng: {marker.Position.Lng}");
+    }
+
+    void onBoxClick()
+    {
+        showMSU = !showMSU;
+    }
+}
