@@ -98,9 +98,6 @@ namespace FlyingDrone
                 Thread.Sleep(2000);
             }
 
-            // Iterate the Points in reverse to go back to Home
-            Array.Reverse(route);
-
             UpdateStatus(DroneState.RETURNING);
             for (int i = route.Length - 1; i >0; i--)
             {
