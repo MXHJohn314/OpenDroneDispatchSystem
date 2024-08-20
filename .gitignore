@@ -18,8 +18,13 @@ bld/
 
 *.pdb
 *.obj
-
+*settings.json*
 # Rolsyn cache
 *.ide/
 
 
+
+/SimDrone/DroneRecord.json
+.dockerignore
+.idea/
+curl_commands.sh
