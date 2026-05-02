@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  database-access:
+    build: ./DatabaseAccess
+    ports:
+      - "85:80"
+    environment:
+      - CONNECTION_STRING=mongodb://mongodb:27017
+      - DATABASE_NAME=odds
+      - ODDS_SETTINGS=settings
+    depends_on:
+      - mongodb
+
+  dispatch:
+    build: ./Dispatch
+    ports:
+      - "83:80"
+    environment:
+      - DATABASE_ACCESS_URL=http://database-access:80
+    depends_on:
+      - database-access
+
+  simdrone:
+    build: ./SimDrone
+    ports:
+      - "84:80"
+    environment:
+      - DISPATCH_URL=http://dispatch:80
+    depends_on:
+      - dispatch
+
+  frontend:
+    build: ./FrontEnd-React
+    ports:
+      - "81:80"
+    depends_on:
+      - database-access
+
+volumes:
+  mongo-data:

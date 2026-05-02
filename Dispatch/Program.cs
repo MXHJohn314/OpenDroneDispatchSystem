@@ -4,7 +4,14 @@ using Domain.RepositoryDefinitions;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCors(options =>
-    options.AddPolicy("CORS", policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.WithOrigins("http://localhost:81", "http://localhost:3000", "http://localhost:5173")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 
 
 #region repositories
@@ -50,7 +57,7 @@ if (app.Environment.IsDevelopment())
 // turn off ssl: https://stackoverflow.com/questions/43809665/enable-disable-ssl-on-asp-net-core-projects-in-development
 // app.UseHttpsRedirection();
 
-app.UseCors("CORS");
+app.UseCors();
 
 app.UseAuthorization();
 

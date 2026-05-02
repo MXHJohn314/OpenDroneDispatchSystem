@@ -28,3 +28,4 @@ bld/
 .dockerignore
 .idea/
 curl_commands.sh
+FrontEnd-React/node_modules

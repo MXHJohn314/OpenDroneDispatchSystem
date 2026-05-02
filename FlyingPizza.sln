@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FrontEnd", "FrontEnd\FrontEnd.csproj", "{B85B16BC-C3E0-403B-8A53-BB5F2DEF51D8}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{EEF22EB1-B0AD-4F77-B529-F0B3606D367F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{EAE9D819-963F-45C6-AB2D-D5E2BF807CC0}"
@@ -25,10 +23,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B85B16BC-C3E0-403B-8A53-BB5F2DEF51D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B85B16BC-C3E0-403B-8A53-BB5F2DEF51D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B85B16BC-C3E0-403B-8A53-BB5F2DEF51D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B85B16BC-C3E0-403B-8A53-BB5F2DEF51D8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EEF22EB1-B0AD-4F77-B529-F0B3606D367F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EEF22EB1-B0AD-4F77-B529-F0B3606D367F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EEF22EB1-B0AD-4F77-B529-F0B3606D367F}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -54,7 +48,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{B85B16BC-C3E0-403B-8A53-BB5F2DEF51D8} = {0A6681A9-F47B-43A1-898C-11AB95118561}
 		{EEF22EB1-B0AD-4F77-B529-F0B3606D367F} = {0A6681A9-F47B-43A1-898C-11AB95118561}
 		{EAE9D819-963F-45C6-AB2D-D5E2BF807CC0} = {0A6681A9-F47B-43A1-898C-11AB95118561}
 		{9E817209-D73B-4FAF-B33F-605EA503DCAA} = {EAA0D9E3-8F13-4D48-BB7A-3C0AD2B40F4C}
